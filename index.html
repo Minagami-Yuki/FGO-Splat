@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="FGO-Splat: Fast and Geometric-optical Consistent Gaussian SLAM Enhanced by Opacity Field">
+  <meta name="keywords" content="Gaussian Splatting, Visual SLAM, Surface Reconstruction, Readering">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FGO-Splat</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="./static/css/bootstrap-4.4.1.css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+  
+  
+  
+  
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/3d-truck.png">
+
+  
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/app.js"></script>
+  <script src="./static/js/video_comparison.js"></script>
+
+  <link rel="stylesheet" href="./static/css/dics.original.css">
+
+  <script src="./static/js/event_handler.js"></script>
+  <script src="./static/js/dics.original.js"></script>
+</head>
+<body>
+
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop"  style="max-width: 1225px; margin: 0 auto;">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="column is-full-width">
+          
+          <h1 class="title is-1 publication-title" style="margin-bottom: 0"><strong>FGO-Splat</strong></h1>
+          <h2 class="title is-2 publication-title" style="margin-top: 0; margin-bottom: 0">Fast and Geometric-optical Consistent Gaussian SLAM Enhanced by Opacity Field</h2>
+          <br>
+          <!-- <h2 class="title is-4 publication-title" style="margin-top: 0; margin-bottom: 0">ICCV 2025</h2>  -->
+          <br>
+            
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <!-- <strong>Zhiang Liu</strong></span>&nbsp;&nbsp;&nbsp;&nbsp; -->
+            <span class="author-block">
+              <!-- <strong>Zhiang Liu</strong></span>&nbsp;&nbsp;&nbsp;&nbsp; -->
+            <span class="author-block">
+              <!-- <strong>Zhiang Liu</strong></span>&nbsp;&nbsp;&nbsp;&nbsp; -->
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">University</span>&nbsp;&nbsp;&nbsp;&nbsp;            
+          </div>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. 
+              <span class="link-block">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>-->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/"
+                   class="external-link button is-normal is-rounded is-dark disabled">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>  
+              <!-- Video Link. 
+              <span class="link-block">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>-->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/"
+                   class="external-link button is-normal is-rounded is-dark disabled">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              
+              <!-- <span class="link-block">
+                <a href="https://github.com/segs-slam/SEGS-SLAM"
+                   class="external-link button is-normal is-rounded is-dark disabled">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Pre-built Code</span>
+                  </a>
+              </span> -->            
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop" style="max-width: 1225px; margin: 0 auto;">
+    <div class="hero-body">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-full-width">
+      
+          <video class="video" width="100%" id="xyalias6" loop playsinline autoplay muted src="video/render_rgb_depth.mp4" onplay="resizeAndPlay(this)" style="height: 0px;"></video>
+          <canvas height=0 class="videoMerge" id="xyalias6Merge"></canvas>
+      
+          <h2 class="subtitle has-text-centered" style="max-width: 1225px; margin-top: 15px" >
+          </h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop" style="max-width: 1225px; margin: 0 auto;">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Abstract</h2>
+        <img src="./img/abstract.png" class="center">
+        <div class="content has-text-justified">
+          <p>
+            We present <b>FGO-Splat</b>, a Gaussian SLAM system capable of processing video streams from arbitrary modalities, which performs <b>fast geometric–optical consistent map reconstruction</b> by maintaining an opacity field.
+            Existing Gaussian SLAM systems struggle to achieve efficient tracking and mapping while supporting multiple input modalities, often requiring a trade-off between rendering quality and geometric accuracy.
+            Our study demonstrates that it is possible to meet all these requirements simultaneously using arbitrary-modality video streams.
+            The key idea of our method lies in explicit feature extraction to capture the underlying scene structure and estimate camera poses, followed by a Gaussian-based ray tracing strategy to construct and optimize a continuous opacity field.
+            When loop closure occurs, our approach performs global adjustment to enhance map consistency. Furthermore, we directly extract the surface using the marching tetrahedra method and refine the resulting mesh with an geometric constraint field.
+            Extensive experiments show that our method achieves superior performance in terms of tracking accuracy, rendering quality, geometric reconstruction, and real-time efficiency.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop" style="max-width: 1225px; margin: 0 auto;">
+
+    <!-- Method OverView -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" style="margin-top: -20px">Method OverView</h2>
+
+        <img src="./img/overview.png" class="center">
+        <div class="content has-text-justified">
+          <p style="margin-top: 30px">
+            <b>FGO-Splat</b> supports <b>mono, stereo, and RGB-D</b> streams, mainly including online tracking and mapping modules, as well as offline surface reconstruction modules. 
+            <b>1)</b> The tracking module perceives geometric features to estimate the camera's attitude and construct a preliminary geometric map. 
+            <b>2)</b> The mapping module builds an opaque guided continuous radiation field while optimizing the appearance and geometric information. 
+            <b>3)</b> The surface reconstruction module extracts accurate surfaces with the help of SDF surrogate fields and refines the mesh through geometric information.
+          </p>
+        </div>
+
+      </div>
+    </div>
+    <!--/ Animation. -->
+    
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Video</h2>
+        <div class="content has-text-centered" >
+          <video class="video" width="100%" controls loop playsinline autoplay muted>
+               <source src="video/segs_slam.mp4" type="video/mp4">
+          </video>
+        </div>
+        <!--
+        <div class="publication-video">
+         <iframe src="https://www.youtube.com/embed/D389imzYO04?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        -->
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Visualization of AfME controlling appearance </h2>
+        <div class="content has-text-centered" >
+          <video class="video" width="100%" controls loop playsinline autoplay muted>
+               <source src="video/room0_rgb_depth.mp4" type="video/mp4">
+          </video>
+        </div>
+        The rendering viewpoints in the <b>left</b> images are same, and only the input to AfME has been changed. The input poses of the
+        AfME in the left images correspond to those in the <b>right</b> images. 
+        <b>The results show that only the color and illumination have changed, while the geometry is fixed</b>.
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+
+  </div>
+</section>
+
+
+  
+<section class="section">
+  <div class="container is-max-desktop"  style="max-width: 1200px; margin: 0 auto;">
+
+    <!-- More results. -->
+    <div class="columns is-centered ">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered" style="margin-top: -30px">Results</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            Here, we present the comparisons of our method against the current state-of-the-art (SOTA) methods, 
+            including Photo-SLAM (CVPR 2024), MonoGS (CVPR 2024), SplaTAM (CVPR 2024), RTG-SLAM (SIGGRAPH 2024), and SEGS-SLAM (ICCV 2025).
+            Our approach achieves superior performance in terms of tracking accuracy, rendering fidelity, geometric reconstruction quality, and real-time efficiency.
+          </p>
+        </div>      
+
+
+        <h2 class="title is-4">Appearance Rendering</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            Our FGO-Splat has achieved the best visual rendering effect in RGB-D, Mono, and Stereo modes.
+          </p>
+        </div>
+        
+        <h3 class="title is-4">1) RGB-D Camera</h3>
+
+        <!-- <div class="content has-text-centered">
+          <video class="video" width="90%" id="xyalias2" loop playsinline autoplay muted src="video/replicamono_photoslam_vs_ours.mp4" onplay="resizeAndPlay(this)" style="height: 0px;"></video>
+          <canvas height=0 class="videoMerge" id="xyalias2Merge"></canvas>
+        </div> -->
+
+
+        <!-- <div class="content has-text-justified">
+          <p>
+            We show more comparisons with additional methods on individual sequences from the Replica and TUM RGB-D datasets. 
+          </p>
+        </div> -->
+        
+        <div class="text-center">
+            <a
+              href="https://github.com/facebookresearch/Replica-Dataset"> Replica</a> Dataset
+        </div>
+        <br>
+        <div class="container" style="max-width: 1225px; margin: 0 auto;">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="replica-rgbd">
+              <li class="nav-item">
+                <a class="nav-link active" onclick="replicargbdSceneEvent(0)">room 0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(1)">room 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(2)">room 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(3)">office 0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(4)">office 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(5)">office 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(6)">office 3</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicargbdSceneEvent(7)">office 4</a>
+              </li>
+          </ul>
+          <div class="b-dics" style="width: 1225px; font-weight: 600;">
+              <img src="img/replica/rgbd/room0/photoslam.jpg" alt="Photo-SLAM">
+              <img src="img/replica/rgbd/room0/splatam.png" alt="SplaTAM">
+              <img src="img/replica/rgbd/room0/monogs.png" alt="MonoGS">
+              <img src="img/replica/rgbd/room0/rtgslam.png" alt="RTG-SLAM">
+              <img src="img/replica/rgbd/room0/segsslam.jpg" alt="SEGS-SLAM">
+              <img src="img/replica/rgbd/room0/ours.png" alt="Ours">
+              <img src="img/replica/rgbd/room0/gt.png" alt="GT">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="text-center">
+            <a
+              href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset"> TUM RGB-D</a> Dataset
+        </div>
+        <br>
+        <div class="container" style="max-width: 640px; margin: 0 auto;">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="tum-rgbd">
+              <li class="nav-item">
+                <a class="nav-link active" onclick="tumrgbdSceneEvent(0)">fr1/xyz</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="tumrgbdSceneEvent(1)">fr2/desk</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="tumrgbdSceneEvent(2)">fr3/office</a>
+              </li>
+          </ul>
+          <div class="b-dics" style="width: 640px; font-weight: 600;">
+              <img src="img/tum/rgbd/fr1/photoslam.png" alt="Photo-SLAM">
+              <img src="img/tum/rgbd/fr1/splatam.png" alt="SplaTAM">
+              <img src="img/tum/rgbd/fr1/monogs.png" alt="MonoGS">
+              <img src="img/tum/rgbd/fr1/segsslam.jpg" alt="SEGS-SLAM">
+              <img src="img/tum/rgbd/fr1/ours.png" alt="Ours">
+              <img src="img/tum/rgbd/fr1/gt.png" alt="GT">
+          </div>
+        </div>
+
+        <br>
+        
+        <h3 class="title is-4">2) Monocular Camera</h3>
+        
+        <div class="content has-text-justified">
+          <p>
+            In the Mono mode, FGO-Splat's rendering quality remains at a leading level.
+          </p>
+        </div>
+
+        <div class="content has-text-centered" >
+          <video class="video" width="90%" id="xyalias1" loop playsinline autoplay muted src="video/mono_comp.mp4" onplay="resizeAndPlay(this)" style="height: 0px;"></video>
+          <canvas height=0 class="videoMerge" id="xyalias1Merge"></canvas>
+        </div>
+        
+        <div class="content has-text-justified">
+          <p>
+            We show more comparisons with additional methods on individual sequences from the Replica and TUM RGB-D datasets. 
+          </p>
+        </div>
+        
+        <div class="text-center">
+            <a
+              href="https://github.com/facebookresearch/Replica-Dataset"> Replica</a> Dataset 
+        </div>
+        <br>
+        
+        <div class="container" style="max-width: 1225px; margin: 0 auto;">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="replica-mono">
+              <li class="nav-item">
+                <a class="nav-link active" onclick="replicamonoSceneEvent(0)">room 0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(1)">room 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(2)">room 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(3)">office 0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(4)">office 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(5)">office 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(6)">office 3</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicamonoSceneEvent(7)">office 4</a>
+              </li>
+          </ul>
+          <div class="b-dics" style="width: 1225px; font-weight: 600;">
+              <img src="img/replica/mono/room0/photoslam.jpg" alt="Photo-SLAM">
+              <img src="img/replica/mono/room0/monogs.png" alt="MonoGS">
+              <img src="img/replica/mono/room0/segsslam.jpg" alt="SEGS-SLAM">
+              <img src="img/replica/mono/room0/ours.png" alt="Ours">
+              <img src="img/replica/mono/room0/gt.png" alt="GT">
+          </div>
+        </div>
+
+        <br>
+
+        <div class="text-center">
+            <a
+              href="https://cvg.cit.tum.de/data/datasets/rgbd-dataset"> TUM RGB-D</a> Dataset
+        </div>
+        <br>
+        <div class="container" style="max-width: 640px; margin: 0 auto;">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="tum-mono">
+              <li class="nav-item">
+                <a class="nav-link active" onclick="tummonoSceneEvent(0)">fr1/xyz</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="tummonoSceneEvent(1)">fr2/desk</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="tummonoSceneEvent(2)">fr3/office</a>
+              </li>
+          </ul>
+          <div class="b-dics" style="width: 640px; font-weight: 600;">
+              <img src="img/tum/rgbd/fr1/photoslam.png" alt="Photo-SLAM">
+              <img src="img/tum/rgbd/fr1/monogs.png" alt="MonoGS">
+              <img src="img/tum/rgbd/fr1/segsslam.jpg" alt="SEGS-SLAM">
+              <img src="img/tum/rgbd/fr1/ours.png" alt="Ours">
+              <img src="img/tum/rgbd/fr1/gt.png" alt="GT">
+          </div>
+        </div>
+
+        <h3 class="title is-4">3) Stereo Camera</h3>
+        <!-- <div class="content has-text-justified">
+          <p>
+            Our SEGS-SLAM remains effective in stereo scenarios, which demonstrates the broader applicability of our system. 
+            As shown in the following figures, SEGS-SLAM better reconstructs the global structure and local details of the scene.
+          </p>
+        </div> -->
+        <br>
+        
+        <div class="content has-text-justified">
+          <p>
+            Our method can still operate stably on the challenging EuRoC MAV dataset.
+          </p>
+        </div>
+        
+        <div class="text-center">
+            <a
+              href="https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets">EuRoC MAV</a> Dataset
+        </div>  
+        <br>
+        
+        <div class="container"   style="max-width: 752px; margin: 0 auto;">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="euroc-stereo">
+              <li class="nav-item">
+                <a class="nav-link active" onclick="eurocstereoSceneEvent(0)">Machine Hall 01</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="eurocstereoSceneEvent(1)">Machine Hall 02</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="eurocstereoSceneEvent(2)">Vicon Room 1 01</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="eurocstereoSceneEvent(3)">Vicon Room 2 01</a>
+              </li>
+          </ul>
+          <div class="b-dics" style="width: 752px; font-weight: 600;">
+              <img src="img/euroc/stereo/mh01/photoslam.png" alt="Photo-SLAM">
+              <img src="img/euroc/stereo/mh01/segsslam.jpg" alt="SEGS-SLAM">
+              <img src="img/euroc/stereo/mh01/ours.png" alt="Ours">
+              <img src="img/euroc/stereo/mh01/gt.png" alt="GT">
+          </div>
+        </div>
+
+        <!-- Geometry Reconstruction -->
+        <h2 class="title is-4">Geometry Reconstruction</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            FGO-Splat also performs well in geometric reconstruction, capable of rendering multimodal visual data and reconstructing accurate meshes.
+          </p>
+        </div>
+
+        <h3 class="title is-4">1) 2D Depth and Normal</h3>
+        <br>
+        <div class="container" style="max-width: 1225px; margin: 0 auto;">
+          <ul class="nav nav-tabs nav-fill nav-justified" id="replica-geom">
+              <li class="nav-item">
+                <a class="nav-link active" onclick="replicageomSceneEvent(0)">room 0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(1)">room 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(2)">room 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(3)">office 0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(4)">office 1</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(5)">office 2</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(6)">office 3</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" onclick="replicageomSceneEvent(7)">office 4</a>
+              </li>
+          </ul>
+          <div class="b-dics" style="width: 1225px; font-weight: 600;">
+              <img src="img/geom/replica/room0/rgb_gt.png" alt="RGB (GT)">
+              <img src="img/geom/replica/room0/rgb_pre.png" alt="RGB (R)">
+              <img src="img/geom/replica/room0/depth_gt.png" alt="Depth (GT)">
+              <img src="img/geom/replica/room0/depth_pre.png" alt="Depth (R)">
+              <img src="img/geom/replica/room0/normal_gt.png" alt="Normal (GT)">
+              <img src="img/geom/replica/room0/normal_pre.png" alt="Normal (R)">
+          </div>
+        </div>
+        <br>
+
+        <h3 class="title is-4">2) 3D Mesh</h3>
+        <head>
+        <style>
+            .image-row {
+                display: flex;
+                align-items: stretch; /* 确保所有图片高度一致 */
+                gap: 10px; /* 图片间距 */
+                width: 100%;
+            }
+            
+            .image-row img {
+                flex: 1; /* 等分宽度 */
+                height: 200px; /* 固定高度 */
+                object-fit: cover; /* 保持图片比例并填充容器 */
+                width: 100%; /* 宽度自适应 */
+            }
+        </style>
+        </head>
+        <body>
+        <div class="image-row">
+            <img src="img/replica/office0_mesh.png" alt="office0">
+            <img src="img/replica/office3_mesh.png" alt="office3">
+            <img src="img/replica/office4_mesh.png" alt="office4">
+            <img src="img/replica/room0_mesh.png" alt="room0">
+        </div>
+        </body>
+
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+<footer class="footer">
+  <div class="container" style="max-width: 1225px; margin: 0 auto;">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website adapted from the Nerfies templates, which is licensed under  a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            If you use the <a href="https://github.com/segs-slam/segs-slam.github.io">source code</a>  
+            of this website, 
+            please also link back to the <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies source code</a> in your footer.
+            The video comparison and image comparison  with sliding bar is from <a href="https://niujinshuchong.github.io/mip-splatting/">Ref-NeRF</a>. 
+
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
